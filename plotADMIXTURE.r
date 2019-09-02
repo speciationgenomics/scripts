@@ -24,7 +24,7 @@ option_list = list(
               help="info text file containing for each individual the population/species information", metavar="character"),
   make_option(c("-k", "--maxK"), type="integer", default=NULL, 
               help="maximum K value", metavar="integer"),
-  make_option(c("-pop", "--populations"), type="character", default=NULL, 
+  make_option(c("-l", "--populations"), type="character", default=NULL, 
               help="comma-separated list of populations/species in the order to be plotted", metavar="character")
 ) 
 opt_parser = OptionParser(option_list=option_list)
