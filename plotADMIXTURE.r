@@ -25,7 +25,9 @@ option_list = list(
   make_option(c("-k", "--maxK"), type="integer", default=NULL, 
               help="maximum K value", metavar="integer"),
   make_option(c("-l", "--populations"), type="character", default=NULL, 
-              help="comma-separated list of populations/species in the order to be plotted", metavar="character")
+              help="comma-separated list of populations/species in the order to be plotted", metavar="character"),
+  make_option(c("-o", "--outPrefix"), type="character", default="default", 
+              help="output prefix (default: name provided with prefix)", metavar="character")
 ) 
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
@@ -44,6 +46,9 @@ if (is.null(opt$prefix)){
   print_help(opt_parser)
   stop("Please provide a comma-separated list of populations/species", call.=FALSE)
 }
+
+# If no output prefix is given, use the input prefix
+if(opt$outPrefix=="default") opt$outPrefix=opt$prefix
 
 # Assign the first argument to prefix
 prefix=opt$prefix
@@ -71,7 +76,7 @@ for(i in 1:length(rep)){spaces=c(spaces,rep(0,rep[i]-1),0.5)}
 spaces<-spaces[-length(spaces)]
 
 # Plot the cluster assignments as a single bar for each individual
-tiff(file=paste0(prefix,".tiff"),width = 2000, height = 1200,res=200)
+tiff(file=paste0(opt$outPrefix,".tiff"),width = 2000, height = 1200,res=200)
  par(mfrow=c(maxK-1,1),mar=c(0,1,0,0),oma=c(2,1,9,1),mgp=c(0,0.2,0),xaxs="i",cex.lab=1.2,cex.axis=0.8)
  bp<-barplot(t(as.matrix(tbl[[2]][order(labels$n),])), col=rainbow(n=2),xaxt="n", border=NA,ylab="K=2",yaxt="n",space=spaces)
  axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
