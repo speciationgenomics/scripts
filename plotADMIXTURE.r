@@ -21,29 +21,26 @@ option_list = list(
   make_option(c("-p", "--prefix"), type="character", default=NULL, 
               help="prefix name (with path if not in the current directory)", metavar="character"),
   make_option(c("-i", "--infofile"), type="character", default=NULL, 
-              help="info text file containing for each individual the population/species information", metavar="character")
+              help="info text file containing for each individual the population/species information", metavar="character"),
   make_option(c("-k", "--maxK"), type="integer", default=NULL, 
-              help="maximum K value", metavar="integer")
+              help="maximum K value", metavar="integer"),
   make_option(c("-pop", "--populations"), type="character", default=NULL, 
               help="comma-separated list of populations/species in the order to be plotted", metavar="character")
 ) 
-opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser);
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
 
 # Check that all arguments are provided
 if (is.null(opt$prefix)){
   print_help(opt_parser)
   stop("Please provide the prefix", call.=FALSE)
-}
-else if (is.null(opt$infofile)){
+}else if (is.null(opt$infofile)){
   print_help(opt_parser)
   stop("Please provide the info file", call.=FALSE)
-}
-else if (is.null(opt$maxK)){
+}else if (is.null(opt$maxK)){
   print_help(opt_parser)
   stop("Please provide the maximum K value to plot", call.=FALSE)
-}
-else if (is.null(opt$populations)){
+}else if (is.null(opt$populations)){
   print_help(opt_parser)
   stop("Please provide a comma-separated list of populations/species", call.=FALSE)
 }
@@ -75,8 +72,8 @@ spaces<-spaces[-length(spaces)]
 
 # Plot the cluster assignments as a single bar for each individual
 tiff(file=paste0(prefix,".tiff"),width = 2000, height = 1200,res=200)
-par(mfrow=c(maxK-1,1),mar=c(0,1,0,0),oma=c(2,1,9,1),mgp=c(0,0.2,0),xaxs="i",cex.lab=1.2,cex.axis=0.8)
-bp<-barplot(t(as.matrix(tbl[[2]][order(labels$n),])), col=rainbow(n=2),xaxt="n", border=NA,ylab="K=2",yaxt="n",space=spaces)
-axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
-lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=rainbow(n=x),xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
+ par(mfrow=c(maxK-1,1),mar=c(0,1,0,0),oma=c(2,1,9,1),mgp=c(0,0.2,0),xaxs="i",cex.lab=1.2,cex.axis=0.8)
+ bp<-barplot(t(as.matrix(tbl[[2]][order(labels$n),])), col=rainbow(n=2),xaxt="n", border=NA,ylab="K=2",yaxt="n",space=spaces)
+ axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
+ lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=rainbow(n=x),xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
 dev.off()
