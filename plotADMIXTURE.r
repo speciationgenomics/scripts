@@ -81,4 +81,6 @@ tiff(file=paste0(opt$outPrefix,".tiff"),width = 2000, height = 1200,res=200)
  bp<-barplot(t(as.matrix(tbl[[2]][order(labels$n),])), col=rainbow(n=2),xaxt="n", border=NA,ylab="K=2",yaxt="n",space=spaces)
  axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
  lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=rainbow(n=x),xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
+ axis(1,at=c(which(spaces==0.5),bp[length(bp)])-diff(c(1,which(spaces==0.5),bp[length(bp)]))/2,
+     labels=unlist(strsplit(opt$populations,",")))
 dev.off()
