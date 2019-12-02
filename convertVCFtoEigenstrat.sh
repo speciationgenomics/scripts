@@ -17,22 +17,20 @@ fi
 
 file=$1
 file=${file%.gz}
+file=${file%.vcf}
 
 
 # if the vcf file is gzipped:
 
-if [ -s $file.gz ]
+if [ -s $file.vcf.gz ]
 then
-
- file=${file%.vcf.gz}
 
  # Get a .map and .ped file
  vcftools --gzvcf $file".vcf.gz" \
          --plink --mac 1.0 --remove-indels --max-alleles 2 --out $file
 
 else
- file=${1%.vcf}
- vcftools --vcf $file".vcf" \
+vcftools --vcf $file".vcf" \
          --plink --mac 1.0 --remove-indels --max-alleles 2 --out $file
 
 fi
