@@ -24,7 +24,7 @@ file=${file%.gz}
 if [ -s $file.gz ]
 then
 
- file=${1%.vcf.gz}
+ file=${file%.vcf.gz}
 
  # Get a .map and .ped file
  vcftools --gzvcf $file".vcf.gz" \
