@@ -24,6 +24,8 @@ option_list = list(
               help="info text file containing for each individual the population/species information", metavar="character"),
   make_option(c("-k", "--maxK"), type="integer", default=NULL, 
               help="maximum K value", metavar="integer"),
+  make_option(c("-m", "--minK"), type="integer", default=2, 
+              help="minimum K value", metavar="integer"),
   make_option(c("-l", "--populations"), type="character", default=NULL, 
               help="comma-separated list of populations/species in the order to be plotted", metavar="character"),
   make_option(c("-o", "--outPrefix"), type="character", default="default", 
@@ -32,7 +34,7 @@ option_list = list(
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
-# Check that all arguments are provided
+# Check that all required arguments are provided
 if (is.null(opt$prefix)){
   print_help(opt_parser)
   stop("Please provide the prefix", call.=FALSE)
@@ -54,7 +56,7 @@ if(opt$outPrefix=="default") opt$outPrefix=opt$prefix
 prefix=opt$prefix
 
 # Get individual names in the correct order
-labels<-read.table(opt$infofile,sep=" ")
+labels<-read.table(opt$infofile)
 
 # Name the columns
 names(labels)<-c("ind","pop")
@@ -66,8 +68,9 @@ levels(labels$n)<-c(1:length(levels(labels$n)))
 labels$n<-as.integer(as.character(labels$n))
 
 # read in the different admixture output files
+minK=opt$minK
 maxK=opt$maxK
-tbl<-lapply(2:maxK, function(x) read.table(paste0(prefix,".",x,".Q")))
+tbl<-lapply(minK:maxK, function(x) read.table(paste0(prefix,".",x,".Q")))
 
 # Prepare spaces to separate the populations/species
 rep<-as.vector(table(labels$n))
