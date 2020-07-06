@@ -1,10 +1,10 @@
 #!/usr/bin/Rscript
 
 # Usage: plotADMIXTURE.r -p <prefix> -i <info file, 2-column file with ind name and population/species name> 
-#                        -k <max K value> -pop <comma-separated list of populations/species in the order to be plotted>
+#                        -k <max K value> -l <comma-separated list of populations/species in the order to be plotted>
 # This R script makes barplots for K=2 and all other K values until max K (specified with -k). It labels the individuals 
 # and splits them into populations or species according to the individual and population/species names in the 2-column file specified with -i.
-# The order of populations/species follows the list of populations/species given with -pop.
+# The order of populations/species follows the list of populations/species given with -l.
 # Usage example: plotADMIXTURE.r -p fileXY -i file.ind.pop.txt -k 4 -pop pop1,pop2,pop3
 # In this example, the script would use the files fileXY.2.Q, fileXY.3.Q, fileXY.4.Q to make barplots for the three populations.
 # file.ind.pop.txt should contain one line for each individual in the same order as in the admixture files e.g.
