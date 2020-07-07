@@ -82,7 +82,7 @@ spaces<-spaces[-length(spaces)]
 tiff(file=paste0(opt$outPrefix,".tiff"),width = 2000, height = 1200,res=200)
  par(mfrow=c(maxK-1,1),mar=c(0,1,0,0),oma=c(2,1,9,1),mgp=c(0,0.2,0),xaxs="i",cex.lab=1.2,cex.axis=0.8)
  # Plot minK
- bp<-barplot(t(as.matrix(tbl[[1]][order(labels$n),])), col=rainbow(n=minK),xaxt="n", border=NA,ylab="K="minK,yaxt="n",space=spaces)
+ bp<-barplot(t(as.matrix(tbl[[1]][order(labels$n),])), col=rainbow(n=minK),xaxt="n", border=NA,ylab=paste0("K=",minK),yaxt="n",space=spaces)
  axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
  # Plot higher K values
  if(maxK>minK)lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=rainbow(n=x+1),xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
