@@ -1,16 +1,18 @@
 #! /bin/bash
 
-# Usage: checkHetsIndvVCF.sh <file>.vcf.gz
+# Usage: checkHetsIndvVCF.sh <file>.vcf.gz [optional: x axis maximum]
 # Outputs the read distribution in heterozygotes
 # - plot with the depth of the genotype against the count of the minor allele
 # - histogram of the proportion of the minor allele reads in the total reads
 # (c) David Marques, 02.12.2015
 # 10.07.2018: Joana Meier: adjusted for .vcf.gz files
+# 19.03.2021: Joana Meier: added option to specify a custom maximum for the x axis
 
 # This script requires vcftools and r
 
 # Get a random number
 r=$RANDOM
+
 
 # This clause checks if the VCF file was given
 if [ $# -eq 0 ] || [ ! -f $1 ]
@@ -19,6 +21,13 @@ then
         exit 1
 else
 	f=$1
+fi
+
+if [ $# -eq 2 ]
+then
+	xmaxx=$2
+else
+	xmaxx="0"
 fi
 
 # Creates individual file
@@ -41,7 +50,7 @@ done
 # Runs r-script to plot plots outlined above
 echo -e "\nRscript outputting your plots"
 Rscript -e 'args=commandArgs(TRUE);options(warn=-1);'\
-'base<-args[1];s<-args[2];inds<-as.character(read.table(paste(s,"tmp.indv",sep="."))$V1);'\
+'base<-args[1];s<-args[2]; xmaxx<-as.double(args[3]);inds<-as.character(read.table(paste(s,"tmp.indv",sep="."))$V1);'\
 'pdf(paste(base,"hetIndStats.pdf",sep="."),width=10,height=5);'\
 'rcbpal<-c("#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026");'\
 'par(mfrow=c(1,2));rf<-colorRampPalette((rcbpal));r<-rf(12);'\
@@ -57,8 +66,9 @@ Rscript -e 'args=commandArgs(TRUE);options(warn=-1);'\
 'freq[,2] <- as.numeric(as.character(freq[,2]));'\
 'freq2D<-matrix(0,nrow=length(x.bin),ncol=length(y.bin));'\
 'freq2D[cbind(freq[,1], freq[,2])] <- freq[,3];'\
+'if(xmaxx==0) xmaxx=max(x.bin,na.rm=T);' \
 'image(x.bin,y.bin,log10(freq2D),col=r,breaks = seq(0,max(log10(freq2D),na.rm=T),length.out=length(r)+1),'\
-'main=paste(i,sep=""),xlab="DP",ylab="Reads minor alleles",xlim=c(0,max(x.bin,na.rm=T)),ylim=c(0,max(x.bin,na.rm=T)/2));'\
+'main=paste(i,sep=""),xlab="DP",ylab="Reads minor alleles",xlim=c(0,xmaxx),ylim=c(0,max(x.bin,na.rm=T)/2));'\
 'barval<-round(10^(seq(0,max(log10(freq2D),na.rm=T),length.out = length(r)+1)));'\
 'legend("topleft",legend=rev(barval[round(seq(2,length(barval),length.out = length(r)))]),'\
 'fill=rev(r[round(seq(1,length(barval[-1]),length.out = length(r)))]),bty="n",ncol=3,title="heterozygous genotypes count");'\
@@ -69,7 +79,7 @@ Rscript -e 'args=commandArgs(TRUE);options(warn=-1);'\
 'xlab="Proportion minor allele reads",main=paste(i,sep=""));'\
 'abline(v=0.2,col="#00FF0088",lty=1);abline(v=0.3,col="#0000FF88",lty=1)'\
 '}}'\
-'};dev.off()' ${f%.vcf.gz} $r >/dev/null
+'};dev.off()' ${f%.vcf.gz} $r $xmaxx >/dev/null
 
 # Removes the temporary files hets.i
 rm $r".hets".*
