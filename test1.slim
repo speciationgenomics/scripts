@@ -1,0 +1,51 @@
+// Keywords: 
+
+// set up a simple neutral simulation
+initialize()
+{
+	// set the overall mutation rate
+	initializeMutationRate(1e-4);
+	
+	// m1 mutation type: neutral
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	
+	// g1 genomic element type: uses m1 for all mutations
+	initializeGenomicElementType("g1", m1, 1.0);
+	
+	// uniform chromosome of length 1 kb
+	initializeGenomicElement(g1, 0, 1000);
+	
+	// uniform recombination along the chromosome
+	initializeRecombinationRate(1e-5);
+}
+
+// create a population of 100 individuals (1000 for testing)
+1
+{
+	sim.addSubpop("p1", 100);
+}
+// at generation 800, start pop growth
+800: {
+
+newSize = asInteger(round(1.03^(sim.generation - 799) * 100));
+ if (newSize >= 2500)
+
+{
+
+newSize = 2500;
+
+sim.deregisterScriptBlock(self);
+ }
+
+p1.setSubpopulationSize(newSize);
+ }
+
+// run to generation 10000
+10000 late() {
+
+// randomly subsample 3 individuals for output
+allIndividuals = sim.subpopulations.individuals;
+ sampledIndividuals = sample(allIndividuals, 3);
+ sampledIndividuals.genomes.outputVCF();
+
+}
