@@ -2,9 +2,9 @@
 
 # Script to convert vcf to eigenstrat format for ADMIXTOOLS
 # Written by Joana Meier
-# It takes a single argument: the vcf file (can be gzipped) and 
+# It takes a single argument: the vcf file (can be gzipped) 
 # optionally you can specify --renameScaff if you have scaffold names (not chr1, chr2...)
-# The script assumes a constant recombination rate of 2 cM/Mb. You may have to change that or change the jackknife block size in ADMIXTOOLS.
+# The script will use a constant recombination rate of 2 cM/Mb assuming that you do not know the recombination rate. You may have to change that or change the jackknife block size in ADMIXTOOLS.
 
 # Here, you can change the recombination rate which is currently set to 2 cM/Mb 
 rec=2
