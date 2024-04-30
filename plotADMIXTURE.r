@@ -29,7 +29,9 @@ option_list = list(
   make_option(c("-l", "--populations"), type="character", default=NULL, 
               help="comma-separated list of populations/species in the order to be plotted", metavar="character"),
   make_option(c("-o", "--outPrefix"), type="character", default="default", 
-              help="output prefix (default: name provided with prefix)", metavar="character")
+              help="output prefix (default: name provided with prefix)", metavar="character"),
+  make_option(c("-c", "--color"), type="character", default="default",
+              help="comma-separated list of colors to use in the plot (default: rainbow palette)", metavar="character")
 ) 
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
@@ -51,6 +53,13 @@ if (is.null(opt$prefix)){
 
 # If no output prefix is given, use the input prefix
 if(opt$outPrefix=="default") opt$outPrefix=opt$prefix
+
+# If no color input is given use built in rainbow, else use input
+if(opt$color=="default") {
+  palette<-rainbow(n=opt$maxK)
+} else {
+  palette<-unlist(strsplit(opt$color, split=","))
+}
 
 # Assign the first argument to prefix
 prefix=opt$prefix
@@ -82,10 +91,10 @@ spaces<-spaces[-length(spaces)]
 tiff(file=paste0(opt$outPrefix,".tiff"),width = 2000, height = 1200,res=200)
  par(mfrow=c(maxK-1,1),mar=c(0,1,0,0),oma=c(2,1,9,1),mgp=c(0,0.2,0),xaxs="i",cex.lab=1.2,cex.axis=0.8)
  # Plot minK
- bp<-barplot(t(as.matrix(tbl[[1]][order(labels$n),])), col=rainbow(n=minK),xaxt="n", border=NA,ylab=paste0("K=",minK),yaxt="n",space=spaces)
+ bp<-barplot(t(as.matrix(tbl[[1]][order(labels$n),])), col=palette,xaxt="n", border=NA,ylab=paste0("K=",minK),yaxt="n",space=spaces)
  axis(3,at=bp,labels=labels$ind[order(labels$n)],las=2,tick=F,cex=0.6)
  # Plot higher K values
- if(maxK>minK)lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=rainbow(n=x+1),xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
+ if(maxK>minK)lapply(2:(maxK-1), function(x) barplot(t(as.matrix(tbl[[x]][order(labels$n),])), col=palette,xaxt="n", border=NA,ylab=paste0("K=",x+1),yaxt="n",space=spaces))
  axis(1,at=c(which(spaces==0.5),bp[length(bp)])-diff(c(1,which(spaces==0.5),bp[length(bp)]))/2,
      labels=unlist(strsplit(opt$populations,",")))
 dev.off()
