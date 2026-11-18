@@ -66,7 +66,7 @@ Rscript -e 'args=commandArgs(TRUE);options(warn=-1);'\
 'freq[,2] <- as.numeric(as.character(freq[,2]));'\
 'freq2D<-matrix(0,nrow=length(x.bin),ncol=length(y.bin));'\
 'freq2D[cbind(freq[,1], freq[,2])] <- freq[,3];'\
-'if(xmaxx==0) xmaxx=max(x.bin,na.rm=T);' \
+'if(xmaxx==0) xmaxx=max(x.bin,na.rm=T);'\
 'image(x.bin,y.bin,log10(freq2D),col=r,breaks = seq(0,max(log10(freq2D),na.rm=T),length.out=length(r)+1),'\
 'main=paste(i,sep=""),xlab="DP",ylab="Reads minor alleles",xlim=c(0,xmaxx),ylim=c(0,max(x.bin,na.rm=T)/2));'\
 'barval<-round(10^(seq(0,max(log10(freq2D),na.rm=T),length.out = length(r)+1)));'\
